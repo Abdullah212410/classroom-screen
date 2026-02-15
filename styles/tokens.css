@@ -1,0 +1,74 @@
+
+:root {
+  /* --- Brand Colors --- */
+  --color-primary-main: #ed3b91;
+  --color-primary-hover: #d6257a;
+  
+  /* --- Interaction --- */
+  --color-interaction-focus: #08b8fb;
+  --color-interaction-focus-light: rgba(8, 184, 251, 0.2);
+
+  /* --- Neutrals --- */
+  --color-neutral-text-main: #091e42;
+  --color-neutral-text-secondary: #6882a9;
+  
+  --color-neutral-bg-main: #ffffff;
+  --color-neutral-bg-alt: #f8fafc;
+  --color-neutral-bg-overlay: rgba(30, 41, 59, 0.9);
+  
+  --color-neutral-border: #e2e8f0;
+  --color-neutral-border-hover: #cbd5e1;
+
+  /* --- Status --- */
+  --color-status-success: #22c55e;
+  --color-status-warning: #f59e0b;
+  --color-status-danger: #ef4444;
+
+  /* --- Typography --- */
+  --font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* --- Radius --- */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* --- Shadows --- */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-glow: 0 0 20px rgba(237, 59, 145, 0.15);
+
+  /* --- Animation --- */
+  --anim-duration-fast: 150ms;
+  --anim-duration-normal: 300ms;
+  --anim-duration-slow: 700ms;
+  --anim-curve-default: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --- LEGACY MAPPINGS (Bridging new tokens to existing UI/Tailwind config) --- */
+  --c-primary: var(--color-primary-main);
+  --c-primary-hover: var(--color-primary-hover);
+  --c-focus: var(--color-interaction-focus);
+  --c-focus-light: var(--color-interaction-focus-light);
+  --c-text-main: var(--color-neutral-text-main);
+  --c-text-secondary: var(--color-neutral-text-secondary);
+  --c-bg-main: var(--color-neutral-bg-main);
+  --c-bg-alt: var(--color-neutral-bg-alt);
+  --c-bg-overlay: var(--color-neutral-bg-overlay);
+  --c-border: var(--color-neutral-border);
+  --c-border-hover: var(--color-neutral-border-hover);
+  --c-success: var(--color-status-success);
+  --c-warning: var(--color-status-warning);
+  --c-danger: var(--color-status-danger);
+}
+
+[data-theme="dark"] {
+  --color-neutral-text-main: #f8fafc;
+  --color-neutral-text-secondary: #94a3b8;
+  --color-neutral-bg-main: #1e293b;
+  --color-neutral-bg-alt: #0f172a;
+  --color-neutral-border: #334155;
+  --color-neutral-border-hover: #475569;
+  --color-neutral-bg-overlay: rgba(30, 41, 59, 0.9);
+}

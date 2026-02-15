@@ -1,0 +1,60 @@
+
+/* --- Buttons --- */
+.btn-primary {
+  background-color: var(--color-primary-main);
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all var(--anim-duration-fast) var(--anim-curve-default);
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background-color: var(--color-neutral-bg-main);
+  color: var(--color-neutral-text-main);
+  border: 1px solid var(--color-neutral-border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--anim-duration-fast) var(--anim-curve-default);
+}
+.btn-secondary:hover {
+  border-color: var(--color-neutral-border-hover);
+  background-color: var(--color-neutral-bg-alt);
+}
+
+/* --- Inputs --- */
+.input-field {
+  width: 100%;
+  background-color: var(--color-neutral-bg-main);
+  border: 1px solid var(--color-neutral-border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  color: var(--color-neutral-text-main);
+  transition: all var(--anim-duration-fast) var(--anim-curve-default);
+  outline: none;
+}
+.input-field:focus {
+  border-color: var(--color-interaction-focus);
+  box-shadow: 0 0 0 3px var(--color-interaction-focus-light);
+}
+
+/* --- Cards --- */
+.card {
+  background-color: var(--color-neutral-bg-main);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-neutral-border);
+}

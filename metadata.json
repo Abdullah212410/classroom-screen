@@ -1,0 +1,16 @@
+{
+  "name": "Classroom Screen Clone",
+  "description": "A collaborative classroom dashboard for teachers to manage widgets like timers, noise meters, and polls with real-time sync for student viewers.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ],
+  "meta": {
+    "systemName": "String Education UI",
+    "version": "1.1.0",
+    "baseUnit": "4px",
+    "authors": [
+      "String Design Team"
+    ]
+  }
+}
