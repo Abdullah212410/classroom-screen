@@ -35,7 +35,15 @@ export const ScreenNavigation: React.FC<ScreenNavigationProps> = ({
 
       <button
         onClick={onCreateNewScreen}
-        className="flex items-center justify-center rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors w-[clamp(2rem,4vw,3rem)] h-[clamp(2rem,4vw,3rem)]"
+        className="flex items-center justify-center rounded-full transition-colors w-[clamp(2rem,4vw,3rem)] h-[clamp(2rem,4vw,3rem)]"
+        style={{
+          backgroundColor: '#ed3b91',
+          color: '#ffffff'
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#d91f7a'}
+        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ed3b91'}
+        onMouseDown={(e) => e.currentTarget.style.backgroundColor = '#c01867'}
+        onMouseUp={(e) => e.currentTarget.style.backgroundColor = '#d91f7a'}
         title="Create New Screen"
       >
         <svg className="w-[clamp(1.25rem,2.5vw,1.5rem)] h-[clamp(1.25rem,2.5vw,1.5rem)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">

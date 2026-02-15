@@ -105,18 +105,17 @@ const WidgetContainer: React.FC<WidgetContainerProps> = ({ widget, isTeacher, on
     // Don't prevent default yet - allow text selection to start
     // We'll only start drag if user moves the pointer
 
-    // Get accurate window position from widget state (source of truth)
-    // Don't use getBoundingClientRect() as it includes transforms
-    const currentLeft = widget.position.x;
-    const currentTop = widget.position.y;
+    // Get accurate window position from actual DOM rendering
+    // Use getBoundingClientRect() for pixel-perfect drag offset
+    const rect = containerRef.current!.getBoundingClientRect();
 
     dragInfo.current = {
       startX: e.clientX,
       startY: e.clientY,
-      startLeft: currentLeft,
-      startTop: currentTop,
-      offsetX: e.clientX - currentLeft,  // Offset from pointer to window top-left
-      offsetY: e.clientY - currentTop,
+      startLeft: widget.position.x,
+      startTop: widget.position.y,
+      offsetX: e.clientX - rect.left,  // Offset from pointer to actual rendered position
+      offsetY: e.clientY - rect.top,
       hasMoved: false
     };
   };

@@ -34,10 +34,10 @@ export const EventCountWidget: React.FC<WidgetProps> = ({ widget, isTeacher, onU
   }, [targetDate]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-full p-6 bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
-       <div className="text-center">
+    <div className="flex flex-col items-center p-6 bg-gradient-to-br from-indigo-500 to-purple-600 text-white" style={{ maxHeight: '85vh', maxWidth: '100%', overflow: 'hidden' }}>
+       <div className="text-center flex flex-col justify-center" style={{ flex: '1 1 auto', minHeight: 0, overflow: 'auto', maxWidth: '100%' }}>
            <div className="text-xl font-bold mb-4 opacity-90">{label || 'Event Countdown'}</div>
-           <div className="flex gap-4">
+           <div className="flex gap-4" style={{ minWidth: 0 }}>
               {[
                   { l: 'Days', v: timeLeft.days },
                   { l: 'Hrs', v: timeLeft.hours },
@@ -53,19 +53,20 @@ export const EventCountWidget: React.FC<WidgetProps> = ({ widget, isTeacher, onU
        </div>
 
        {isTeacher && (
-           <div className="absolute bottom-0 w-full p-2 bg-white/10 backdrop-blur-md flex gap-2">
-               <input 
-                 type="text" 
+           <div className="w-full p-2 bg-white/10 backdrop-blur-md flex gap-2 mt-4" style={{ flex: '0 0 auto', minWidth: 0 }}>
+               <input
+                 type="text"
                  placeholder="Event Name"
                  value={label || ''}
                  onChange={(e) => onUpdate({ settings: { ...widget.settings, label: e.target.value } })}
-                 className="flex-1 bg-white/20 border-none rounded text-xs px-2 text-white placeholder-white/50 focus:ring-0"
+                 className="flex-1 min-w-0 bg-white/20 border-none rounded text-xs px-2 text-white placeholder-white/50 focus:ring-0"
                />
-               <input 
-                 type="datetime-local" 
+               <input
+                 type="datetime-local"
                  value={targetDate || ''}
                  onChange={(e) => onUpdate({ settings: { ...widget.settings, targetDate: e.target.value } })}
                  className="w-32 bg-white/20 border-none rounded text-xs px-2 text-white"
+                 style={{ maxWidth: '100%' }}
                />
            </div>
        )}

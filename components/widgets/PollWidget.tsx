@@ -28,8 +28,8 @@ export const PollWidget: React.FC<WidgetProps> = ({ widget, isTeacher, onUpdate 
   };
 
   return (
-    <div className="flex flex-col bg-white/40 p-4 md:p-6 space-y-4 w-full" style={{ maxWidth: 'clamp(360px, 42vw, 560px)' }}>
-      <div className="space-y-1.5">
+    <div className="flex flex-col bg-white/40 p-3 md:p-4" style={{ width: 'clamp(400px, 50vw, 680px)', height: 'auto', maxHeight: '85vh', overflow: 'hidden', maxWidth: '100%' }}>
+      <div className="space-y-1.5 mb-2" style={{ flex: '0 0 auto' }}>
         {isTeacher ? (
           <>
             <label className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] ml-1">Poll Question</label>
@@ -46,22 +46,22 @@ export const PollWidget: React.FC<WidgetProps> = ({ widget, isTeacher, onUpdate 
         )}
       </div>
 
-      <div className="flex flex-col space-y-4 overflow-y-auto pr-2 scrollbar-hide" style={{ maxHeight: '65vh' }}>
+      <div className="flex flex-col space-y-1.5 pr-2 overflow-auto" style={{ flex: '1 1 auto', minHeight: 0, maxWidth: '100%' }}>
         {options.map((opt: string, i: number) => {
           const percentage = totalVotes === 0 ? 0 : Math.round((results[i] / totalVotes) * 100);
           return (
-            <div key={i} className="flex flex-col space-y-3 animate-in fade-in slide-in-from-left duration-500" style={{ animationDelay: `${i * 100}ms` }}>
-              <div className="flex items-center justify-between gap-3">
+            <div key={i} className="flex flex-col space-y-1.5 animate-in fade-in slide-in-from-left duration-500" style={{ animationDelay: `${i * 100}ms` }}>
+              <div className="flex items-center justify-between gap-3" style={{ minWidth: 0 }}>
                 {isTeacher ? (
                   <input
                     type="text"
                     value={opt}
                     placeholder={`Option ${i+1}`}
                     onChange={(e) => handleUpdateOption(i, e.target.value)}
-                    className="flex-1 p-4 text-base font-bold bg-white border-2 border-border-default rounded-2xl shadow-sm focus:border-focus transition-all outline-none text-text-main min-h-[48px]"
+                    className="flex-1 min-w-0 p-3 text-base font-bold bg-white border-2 border-border-default rounded-2xl shadow-sm focus:border-focus transition-all outline-none text-text-main min-h-[44px]"
                   />
                 ) : (
-                  <button className="flex-1 text-left p-4 text-base font-bold bg-white/80 hover:bg-white border-2 border-border-default hover:border-primary rounded-2xl shadow-sm transition-all text-text-main min-h-[48px]">
+                  <button className="flex-1 min-w-0 text-left p-3 text-base font-bold bg-white/80 hover:bg-white border-2 border-border-default hover:border-primary rounded-2xl shadow-sm transition-all text-text-main min-h-[44px]">
                     {opt}
                   </button>
                 )}
@@ -98,7 +98,7 @@ export const PollWidget: React.FC<WidgetProps> = ({ widget, isTeacher, onUpdate 
       </div>
 
       {isTeacher && (
-        <div className="pt-3 border-t border-border-default flex items-center justify-between">
+        <div className="pt-2 mt-2 border-t border-border-default flex items-center justify-between" style={{ flex: '0 0 auto' }}>
            <button
              onClick={() => onUpdate({ settings: { ...widget.settings, showResults: !showResults }})}
              className={`px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] transition-all flex items-center gap-2.5 ${showResults ? 'bg-focus-light text-focus border border-focus' : 'bg-bg-alt text-text-secondary hover:bg-gray-200 border border-transparent'}`}

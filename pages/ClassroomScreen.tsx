@@ -295,7 +295,7 @@ const ClassroomScreen: React.FC<ClassroomScreenProps> = ({
         )}
 
         {/* Layer 10: Widgets */}
-        <div className={`absolute inset-0 z-10 transition-all duration-300 ${isDrawing ? 'opacity-80 blur-[1px]' : ''}`}>
+        <div className={`absolute inset-0 z-20 transition-all duration-300 pointer-events-none ${isDrawing ? 'opacity-80 blur-[1px]' : ''}`}>
           <ScreenLayout 
             room={room} 
             isTeacher={true} 
@@ -305,8 +305,8 @@ const ClassroomScreen: React.FC<ClassroomScreenProps> = ({
         </div>
 
         {/* Layer 20: Whiteboard */}
-        <div 
-          className={`absolute inset-0 z-20 transition-all duration-300 ${isDrawing ? 'pointer-events-auto bg-black/5' : 'pointer-events-none'}`}
+        <div
+          className={`absolute inset-0 z-10 transition-all duration-300 ${isDrawing ? 'pointer-events-auto bg-black/5' : 'pointer-events-none'}`}
         >
           <Whiteboard 
             ref={whiteboardRef}
