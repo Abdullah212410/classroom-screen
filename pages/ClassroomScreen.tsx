@@ -8,12 +8,34 @@ import TopBar from '../components/TopBar';
 import Whiteboard from '../components/Whiteboard';
 import { ToolsPanel } from '../components/ToolsPanel';
 import { BackgroundNavigation } from '../components/BackgroundNavigation';
+import { useAutoSave } from '../hooks/useAutoSave';
 
 const DEFAULT_ROOM_ID = 'main-classroom-session';
 const SAFE_FALLBACK_IMG = 'https://images.unsplash.com/photo-1483664852095-d6cc68707056?auto=format&fit=crop&w=1920&q=80';
 const FALLBACK_VIDEO_MP4 = 'https://assets.mixkit.co/videos/preview/mixkit-white-abstract-bokeh-lights-22955-large.mp4';
 
-const ClassroomScreen: React.FC = () => {
+interface ClassroomScreenProps {
+  roomId?: string;
+  onCreateNewScreen?: () => void;
+  onPreviousScreen?: () => void;
+  onDeleteScreen?: (screenId?: string) => void;
+  currentScreenIndex?: number;
+  totalScreens?: number;
+  canGoBack?: boolean;
+  screensList?: Array<{ id: string; name: string }>;
+}
+
+const ClassroomScreen: React.FC<ClassroomScreenProps> = ({
+  roomId,
+  onCreateNewScreen,
+  onPreviousScreen,
+  onDeleteScreen,
+  currentScreenIndex = 1,
+  totalScreens = 1,
+  canGoBack = false,
+  screensList = []
+}) => {
+  const ROOM_ID = roomId || DEFAULT_ROOM_ID;
   const [room, setRoom] = useState<RoomState | null>(null);
   const [mode, setMode] = useState<AppMode>('tools');
   const [isBgModalOpen, setIsBgModalOpen] = useState(false);
@@ -28,12 +50,32 @@ const ClassroomScreen: React.FC = () => {
   const whiteboardRef = useRef<any>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Auto-save room state (background, widgets, drawing elements)
+  useAutoSave({
+    key: `room_${ROOM_ID}`,
+    data: room,
+    enabled: !!room,
+    onError: (error) => {
+      console.error('[ClassroomScreen] Auto-save error:', error);
+    }
+  });
+
+  // Auto-save brush settings
+  useAutoSave({
+    key: `brush_settings_${ROOM_ID}`,
+    data: brushSettings,
+    enabled: true,
+    onRestore: (restored) => {
+      setBrushSettings(restored);
+    }
+  });
+
   useEffect(() => {
-    const initialState = roomService.getRoomState(DEFAULT_ROOM_ID);
+    const initialState = roomService.getRoomState(ROOM_ID);
     setRoom(initialState);
 
     const unsubscribe = roomService.addListener((msg) => {
-      if (msg.roomId === DEFAULT_ROOM_ID && (msg.type === 'UPDATE_ROOM' || msg.type === 'SYNC_RESPONSE')) {
+      if (msg.roomId === ROOM_ID && (msg.type === 'UPDATE_ROOM' || msg.type === 'SYNC_RESPONSE')) {
         setRoom(msg.payload);
       }
     });
@@ -61,7 +103,7 @@ const ClassroomScreen: React.FC = () => {
     roomService.broadcast({
       type: 'UPDATE_ROOM',
       payload: newRoom,
-      roomId: DEFAULT_ROOM_ID,
+      roomId: ROOM_ID,
       sender: 'teacher'
     });
   }, []);
@@ -209,20 +251,19 @@ const ClassroomScreen: React.FC = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col overflow-hidden bg-slate-50 relative">
-      <TopBar 
-        isDrawingMode={isDrawing} 
-        onExitDrawing={() => setMode('tools')} 
+      <TopBar
+        isDrawingMode={isDrawing}
+        onExitDrawing={() => setMode('tools')}
         room={room}
         onImportRoom={handleImportRoom}
+        currentScreenIndex={currentScreenIndex}
+        totalScreens={totalScreens}
+        canGoBack={canGoBack}
+        onPreviousScreen={onPreviousScreen}
+        onCreateNewScreen={onCreateNewScreen}
+        onDeleteScreen={onDeleteScreen}
+        screensList={screensList}
       />
-
-      {!isDrawing && (
-        <BackgroundNavigation 
-          currentBackground={room.background}
-          onSetBackground={setBackground}
-          onOpenModal={() => setIsBgModalOpen(true)}
-        />
-      )}
       
       <div className="flex-1 relative overflow-hidden h-full w-full bg-slate-900">
         {/* Layer 0: Background */}
@@ -325,7 +366,7 @@ function getInitialDimensions(type: WidgetType) {
         case WidgetType.IMAGE: return { width: 300, height: 300 };
         case WidgetType.TEXT: return { width: 400, height: 200 };
         case WidgetType.TIMETABLE: return { width: 350, height: 400 };
-        case WidgetType.CLOCK: return { width: 280, height: 180 };
+        case WidgetType.CLOCK: return { width: 320, height: 380 };
         case WidgetType.GROUP_MAKER: return { width: 500, height: 400 };
         case WidgetType.VIDEO: return { width: 480, height: 320 };
         case WidgetType.WEBCAM: return { width: 400, height: 300 };

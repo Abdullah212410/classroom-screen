@@ -86,6 +86,7 @@
         --anim-duration-normal: 300ms;
         --anim-duration-slow: 700ms;
         --anim-curve-default: cubic-bezier(0.4, 0, 0.2, 1);
+        --anim-curve-entry: cubic-bezier(0.16, 1, 0.3, 1);
 
         /* --- LEGACY MAPPINGS --- */
         --c-primary: var(--color-primary-main);
@@ -145,6 +146,29 @@
         color: var(--c-text-main);
       }
 
+      /* Dragging state - applied directly for instant feedback */
+      .is-dragging {
+        cursor: grabbing !important;
+        box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+        transition: none !important;
+        will-change: transform;
+        border: 2px solid var(--c-focus) !important;
+      }
+
+      .is-dragging * {
+        cursor: grabbing !important;
+      }
+
+      /* Smooth widget resize transitions */
+      .widget-card:not(.is-dragging) {
+        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                    height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                    max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                    box-shadow 0.2s ease,
+                    border-color 0.3s ease;
+      }
+
       .toolbar-pill {
         background: var(--c-bg-main);
         backdrop-filter: blur(10px);
@@ -202,7 +226,186 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
-      
+
+      /* Toolbar Responsive Enhancements */
+      .toolbar-container {
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x proximity;
+      }
+
+      .toolbar-container > * {
+        scroll-snap-align: start;
+      }
+
+      /* Ensure touch targets >= 44px */
+      @media (max-width: 768px) {
+        .toolbar-container button {
+          min-height: 44px;
+          min-width: 44px;
+        }
+      }
+
+      /* Design Token Application - Toolbar Styling */
+      .toolbar-container {
+        background: var(--color-neutral-bg-main);
+        border: 1px solid var(--color-neutral-border);
+        box-shadow: var(--shadow-md), var(--shadow-glow);
+        border-radius: var(--radius-xl);
+        transition: all var(--anim-duration-normal) var(--anim-curve-default);
+      }
+
+      .toolbar-container:hover {
+        box-shadow: var(--shadow-lg), var(--shadow-glow);
+        border-color: var(--color-neutral-border-hover);
+      }
+
+      /* Active/Primary Actions */
+      .toolbar-container .bg-primary {
+        background-color: var(--color-primary-main) !important;
+        box-shadow: var(--shadow-glow);
+        transition: all var(--anim-duration-fast) var(--anim-curve-entry);
+      }
+
+      .toolbar-container .bg-primary:hover {
+        background-color: var(--color-primary-hover) !important;
+        transform: translateY(-1px);
+      }
+
+      .toolbar-container .bg-primary:active {
+        transform: translateY(0);
+      }
+
+      /* Focus States */
+      .toolbar-container .bg-focus-light {
+        background-color: var(--color-interaction-focus-light) !important;
+        color: var(--color-interaction-focus) !important;
+      }
+
+      .toolbar-container button:focus-visible {
+        outline: 2px solid var(--color-interaction-focus);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px var(--color-interaction-focus-light);
+      }
+
+      /* Text Colors */
+      .toolbar-container {
+        color: var(--color-neutral-text-main);
+      }
+
+      .toolbar-container .text-gray-400 {
+        color: var(--color-neutral-text-secondary) !important;
+      }
+
+      .toolbar-container .text-gray-600 {
+        color: var(--color-neutral-text-main) !important;
+      }
+
+      /* Borders */
+      .toolbar-container .border-gray-100,
+      .toolbar-container .border-gray-200 {
+        border-color: var(--color-neutral-border) !important;
+      }
+
+      /* Background Hovers */
+      .toolbar-container .hover\:bg-gray-100:hover,
+      .toolbar-container .hover\:bg-gray-50:hover {
+        background-color: var(--color-neutral-bg-alt) !important;
+      }
+
+      /* Rounded Corners - Crisp and Modern */
+      .toolbar-container button {
+        border-radius: var(--radius-xl);
+      }
+
+      .toolbar-container .rounded-2xl {
+        border-radius: var(--radius-xl);
+      }
+
+      .toolbar-container .rounded-xl {
+        border-radius: var(--radius-lg);
+      }
+
+      /* Separators */
+      .toolbar-container > div > .bg-gray-200,
+      .toolbar-container > div > .bg-gray-300 {
+        background-color: var(--color-neutral-border) !important;
+      }
+
+      /* Smooth Transitions */
+      .toolbar-container button,
+      .toolbar-container > * {
+        transition: all var(--anim-duration-fast) var(--anim-curve-default);
+      }
+
+      /* Entry Animation */
+      @keyframes slideInFromBottom {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .toolbar-container {
+        animation: slideInFromBottom var(--anim-duration-normal) var(--anim-curve-entry);
+      }
+
+      /* Accessibility - High Contrast Focus */
+      @media (prefers-contrast: high) {
+        .toolbar-container button:focus-visible {
+          outline-width: 3px;
+          outline-offset: 3px;
+        }
+      }
+
+      /* Clarity Over Decoration */
+      .toolbar-container {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      /* Dark Mode Support */
+      [data-theme="dark"] .toolbar-container {
+        background: var(--color-neutral-bg-main);
+        border-color: var(--color-neutral-border);
+      }
+
+      [data-theme="dark"] .toolbar-container:hover {
+        border-color: var(--color-neutral-border-hover);
+      }
+
+      /* Z-Index Hierarchy - Prevent Overlapping */
+      .widget-card {
+        z-index: 10;
+        position: relative;
+      }
+
+      .widget-card:hover {
+        z-index: 20;
+      }
+
+      /* Ensure drawing toolbar always on top */
+      .toolbar-container {
+        z-index: 300 !important;
+        position: relative;
+      }
+
+      /* Safe spacing on mobile to prevent toolbar overlap */
+      @media (max-width: 768px) {
+        .toolbar-container {
+          margin-bottom: max(env(safe-area-inset-bottom), 16px);
+        }
+
+        /* Add padding to widget container on mobile to prevent overlap with bottom toolbar */
+        body {
+          padding-bottom: 120px;
+        }
+      }
+
       input:focus, textarea:focus {
         outline: none;
       }
@@ -224,5 +427,6 @@
 </head>
 <body>
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
 </body>
 </html>

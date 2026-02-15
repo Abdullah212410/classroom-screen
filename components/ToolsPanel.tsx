@@ -108,10 +108,10 @@ export const ToolsPanel: React.FC<ToolsPanelProps> = ({ settings, onUpdate, onCl
       )}
 
       {/* Main Toolbar */}
-      <div className="bg-white rounded-[2rem] shadow-floating border border-border-subtle p-2 px-3 md:p-3 md:px-5 flex items-center gap-2 md:gap-5 h-auto min-h-[70px] md:h-[88px] select-none animate-in slide-in-from-bottom-8 duration-300 z-40 overflow-x-auto scrollbar-hide max-w-full">
+      <div className="bg-white rounded-[2rem] shadow-floating border border-border-subtle p-2 px-3 md:p-3 md:px-5 flex flex-nowrap items-center gap-2 md:gap-3 h-auto min-h-[70px] md:min-h-[88px] select-none animate-in slide-in-from-bottom-8 duration-300 z-40 overflow-x-auto scrollbar-hide max-w-full toolbar-container">
         
         {/* Left Group: Mode Toggles */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 shrink-0 min-w-fit">
           <button
             onClick={handleSquiggleClick}
             className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 ${!isSelectTool ? 'bg-primary text-white shadow-lg shadow-glow scale-105' : 'text-gray-400 hover:bg-gray-100'}`}
@@ -136,7 +136,7 @@ export const ToolsPanel: React.FC<ToolsPanelProps> = ({ settings, onUpdate, onCl
         <div className="w-px h-10 bg-gray-200 shrink-0"></div>
 
         {/* Tools Group */}
-        <div className="flex items-center gap-1 shrink-0">
+        <div className="flex items-center gap-1 shrink-0 min-w-fit">
           {/* Pencil */}
           <ToolButton 
             isActive={settings.tool === 'pen'} 
@@ -173,7 +173,7 @@ export const ToolsPanel: React.FC<ToolsPanelProps> = ({ settings, onUpdate, onCl
         <div className="w-px h-10 bg-gray-200 shrink-0"></div>
 
         {/* Colors Group */}
-        <div className="flex flex-col gap-2 shrink-0">
+        <div className="flex flex-col gap-2 shrink-0 min-w-fit">
           <div className="flex gap-2">
             {COLORS_TOP.map(c => (
               <ColorButton 
@@ -200,7 +200,7 @@ export const ToolsPanel: React.FC<ToolsPanelProps> = ({ settings, onUpdate, onCl
         <div className="w-1 h-1 rounded-full bg-gray-300 mx-1 shrink-0"></div>
 
         {/* Right Controls */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-3 shrink-0 min-w-fit">
           {/* Size Button */}
           <button 
             onClick={cycleSize}

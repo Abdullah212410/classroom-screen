@@ -13,9 +13,24 @@ export const TrafficLightWidget: React.FC<WidgetProps> = ({ widget, isTeacher, o
   const { label } = widget.settings;
 
   const colors = [
-    { id: 'red', bg: 'bg-red-500', shadow: 'shadow-[0_0_20px_rgba(239,68,68,0.5)]', ring: 'ring-red-500/40' },
-    { id: 'yellow', bg: 'bg-amber-400', shadow: 'shadow-[0_0_20px_rgba(251,191,36,0.5)]', ring: 'ring-amber-400/40' },
-    { id: 'green', bg: 'bg-emerald-500', shadow: 'shadow-[0_0_20px_rgba(16,185,129,0.5)]', ring: 'ring-emerald-500/40' },
+    {
+      id: 'red',
+      bgColor: '#FF3B30',
+      glowShadow: '0 0 30px rgba(255,59,48,0.8), 0 0 60px rgba(255,59,48,0.4)',
+      ring: 'ring-[#FF3B30]/50'
+    },
+    {
+      id: 'yellow',
+      bgColor: '#FFD60A',
+      glowShadow: '0 0 30px rgba(255,214,10,0.8), 0 0 60px rgba(255,214,10,0.4)',
+      ring: 'ring-[#FFD60A]/50'
+    },
+    {
+      id: 'green',
+      bgColor: '#34C759',
+      glowShadow: '0 0 30px rgba(52,199,89,0.8), 0 0 60px rgba(52,199,89,0.4)',
+      ring: 'ring-[#34C759]/50'
+    },
   ];
 
   return (
@@ -33,18 +48,38 @@ export const TrafficLightWidget: React.FC<WidgetProps> = ({ widget, isTeacher, o
          )}
       </div>
       
-      <div className="bg-bg-alt/50 p-4 rounded-full flex flex-col gap-4 shadow-inner border border-border-default backdrop-blur-sm relative">
-        {colors.map(c => (
-          <button 
-            key={c.id}
-            disabled={!isTeacher}
-            onClick={() => onUpdate({ state: { color: c.id } })}
-            className={`rounded-full transition-all duration-300 border-2 relative ${color === c.id ? `${c.bg} ${c.shadow} scale-110 border-white ring-4 ${c.ring} z-10` : 'bg-gray-200 border-transparent opacity-40 hover:opacity-60 grayscale'}`}
-            style={{ width: 'clamp(3rem, 10vw, 4rem)', height: 'clamp(3rem, 10vw, 4rem)' }}
-          >
-            {color === c.id && <div className="absolute inset-0 bg-gradient-to-tr from-white/30 to-transparent rounded-full"></div>}
-          </button>
-        ))}
+      <div
+        className="p-6 rounded-full flex flex-col gap-5 relative"
+        style={{
+          background: '#0B0B0F',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          boxShadow: '0 12px 30px rgba(0, 0, 0, 0.35)'
+        }}
+      >
+        {colors.map(c => {
+          const isActive = color === c.id;
+          return (
+            <button
+              key={c.id}
+              disabled={!isTeacher}
+              onClick={() => onUpdate({ state: { color: c.id } })}
+              className={`rounded-full transition-all duration-300 border-2 relative ${isActive ? `scale-[1.15] border-white ring-4 ${c.ring} z-10 brightness-110` : 'border-gray-300/60 opacity-50 hover:opacity-70'}`}
+              style={{
+                width: 'clamp(3.5rem, 10vw, 5rem)',
+                height: 'clamp(3.5rem, 10vw, 5rem)',
+                backgroundColor: isActive ? c.bgColor : `${c.bgColor}20`,
+                boxShadow: isActive ? c.glowShadow : '0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.3)',
+              }}
+            >
+              {isActive && (
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-white/40 to-transparent rounded-full"></div>
+                  <div className="absolute inset-2 bg-white/20 rounded-full blur-sm"></div>
+                </>
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

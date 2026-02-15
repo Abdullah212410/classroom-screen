@@ -45,6 +45,7 @@
   --anim-duration-normal: 300ms;
   --anim-duration-slow: 700ms;
   --anim-curve-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --anim-curve-entry: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* --- LEGACY MAPPINGS (Bridging new tokens to existing UI/Tailwind config) --- */
   --c-primary: var(--color-primary-main);

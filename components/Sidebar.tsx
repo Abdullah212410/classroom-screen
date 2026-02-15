@@ -314,27 +314,42 @@ interface WidgetButtonProps {
   isMore?: boolean; 
 }
 
-const WidgetButton: React.FC<WidgetButtonProps> = ({ 
-  icon, 
-  label, 
-  onClick, 
+const WidgetButton: React.FC<WidgetButtonProps> = ({
+  icon,
+  label,
+  onClick,
   active = false,
   className = "",
   isMore = false
 }) => (
-  <button 
+  <button
     onClick={onClick}
-    className={`group flex flex-col items-center justify-center h-full transition-transform active:scale-95 py-1 ${className}`}
-    style={{ minWidth: 'clamp(56px, 15vw, 68px)' }}
+    className={`group flex flex-col items-center justify-center gap-1 transition-all duration-200 ease-out hover:scale-105 active:scale-95 cursor-pointer ${className}`}
+    style={{
+      minWidth: 'clamp(64px, 5vw, 76px)',
+      padding: '8px 6px'
+    }}
   >
-    <div 
-        className={`flex items-center justify-center rounded-[14px] transition-colors duration-200 border border-transparent 
-        ${active ? 'bg-focus-light border-focus text-focus' : 'group-hover:bg-bg-alt/50 text-text-main'}`}
-        style={{ width: 'clamp(40px, 11vw, 46px)', height: 'clamp(40px, 11vw, 46px)' }}
+    <div
+        className={`flex items-center justify-center rounded-lg transition-all duration-200
+        ${active
+          ? 'bg-blue-50 ring-2 ring-blue-400 ring-offset-1 text-blue-600 scale-105'
+          : 'group-hover:bg-black/5 text-gray-700'
+        }`}
+        style={{
+          width: '28px',
+          height: '28px'
+        }}
     >
-       <div className="scale-[0.9]">{icon}</div>
+       <div className="scale-[0.85]">{icon}</div>
     </div>
-    <span className={`text-[9px] md:text-[11px] font-bold truncate w-full px-0.5 text-center leading-tight mt-1.5 max-w-[70px] tracking-tight ${active ? 'text-focus' : 'text-text-main'}`}>{label}</span>
+    <span
+      className={`text-[12px] font-medium truncate w-full text-center leading-tight tracking-tight
+      ${active ? 'text-blue-600 font-semibold' : 'text-gray-700'}`}
+      style={{ maxWidth: '72px' }}
+    >
+      {label}
+    </span>
   </button>
 );
 
@@ -406,38 +421,57 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <>
       <div className="fixed bottom-6 left-0 right-0 z-[200] flex justify-center px-4 pointer-events-none">
-        
-        {/* Main Toolbar Pill */}
-        <div className={`toolbar-pill p-1.5 flex items-center gap-1 pointer-events-auto max-w-[95vw] overflow-visible relative transition-all duration-300 ${isCollapsed ? '' : 'pl-4'}`}>
-            
-            <div className={`flex items-center gap-1 ${isCollapsed ? 'hidden' : 'flex'}`}>
-                {/* Left Controls (Draw / Pointer) */}
-                <div className="flex items-center gap-1 shrink-0 mr-1">
-                    <button 
-                        onClick={onToggleDrawMode}
-                        className={`group flex flex-col items-center justify-center h-full transition-transform active:scale-95 py-1`}
-                        style={{ minWidth: 'clamp(50px, 12vw, 60px)' }}
-                        title="Draw"
-                    >
-                        <div className={`w-[40px] h-[40px] rounded-[14px] flex items-center justify-center transition-all duration-200 ${isDrawingMode ? 'bg-primary text-white shadow-lg' : 'text-text-main hover:bg-bg-alt/50'}`}>
-                            {ICONS.SQUIGGLE}
-                        </div>
-                    </button>
-                </div>
 
-                <div className="w-px h-8 md:h-10 bg-border-default mx-1 shrink-0"></div>
+        {/* Main Toolbar - Redesigned */}
+        <div
+          className={`pointer-events-auto flex items-center overflow-visible relative transition-all duration-300 ease-out ${
+            isCollapsed ? 'rounded-full px-2' : 'rounded-[24px] px-5'
+          }`}
+          style={{
+            backgroundColor: '#f3f4f6',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08)',
+            padding: isCollapsed ? '8px' : '12px 20px',
+            gap: isCollapsed ? '0' : '20px',
+            maxWidth: '95vw'
+          }}
+        >
 
-                {/* Scrollable Widget List */}
-                <div className="flex items-center gap-0.5 overflow-x-auto scrollbar-hide max-w-[60vw] md:max-w-none">
-                    <WidgetButton 
+            <div className={`flex items-center transition-all duration-300 ${isCollapsed ? 'hidden opacity-0' : 'flex opacity-100'}`} style={{ gap: '20px' }}>
+                {/* Draw/Annotate Mode Toggle - Purple Button */}
+                <button
+                    onClick={onToggleDrawMode}
+                    className={`flex items-center justify-center rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
+                      isDrawingMode
+                        ? 'bg-indigo-600 text-white shadow-lg scale-105'
+                        : 'bg-indigo-500 text-white hover:bg-indigo-600'
+                    }`}
+                    style={{
+                      width: '44px',
+                      height: '44px',
+                      boxShadow: isDrawingMode ? '0 4px 16px rgba(99, 102, 241, 0.4)' : '0 2px 8px rgba(99, 102, 241, 0.3)'
+                    }}
+                    title="Draw Mode"
+                    aria-label="Toggle Annotation Mode"
+                >
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                      <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                      <path d="M2 2l7.586 7.586"/>
+                      <circle cx="11" cy="11" r="2"/>
+                    </svg>
+                </button>
+
+                {/* Main Widget Buttons */}
+                <div className="flex items-center overflow-x-auto scrollbar-hide" style={{ gap: '20px' }}>
+                    <WidgetButton
                         label="background"
                         onClick={() => setShowBgModal(true)}
                         active={showBgModal}
                         icon={ICONS.BACKGROUND}
                     />
-                    
+
                     {toolbarWidgets.map((type) => (
-                        <WidgetButton 
+                        <WidgetButton
                             key={type}
                             label={WIDGET_LABELS[type]}
                             icon={ICONS[type]}
@@ -446,57 +480,77 @@ const Sidebar: React.FC<SidebarProps> = ({
                     ))}
                 </div>
 
-                <div className="w-px h-8 md:h-10 bg-border-default mx-1 shrink-0"></div>
-
                 {/* More Button */}
-                <div className="relative shrink-0 flex items-center gap-1 pr-1">
-                    <button 
+                <div className="relative shrink-0">
+                    <button
                         ref={moreButtonRef}
                         onClick={() => setShowMoreMenu(!showMoreMenu)}
-                        className={`group flex flex-col items-center justify-center transition-transform active:scale-95 py-1`}
-                        style={{ minWidth: 'clamp(50px, 12vw, 50px)' }}
+                        className={`group flex flex-col items-center justify-center gap-1 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer`}
+                        style={{
+                          minWidth: 'clamp(64px, 5vw, 76px)',
+                          padding: '8px 6px'
+                        }}
                     >
-                        <div 
-                            className={`flex items-center justify-center rounded-[14px] transition-colors border border-transparent ${showMoreMenu ? 'bg-focus-light border-focus ring-2 ring-focus-light text-focus' : 'group-hover:bg-bg-alt/50 text-text-main'}`}
-                            style={{ width: 'clamp(40px, 11vw, 46px)', height: 'clamp(40px, 11vw, 46px)' }}
+                        <div
+                            className={`flex items-center justify-center rounded-lg transition-all duration-200
+                            ${showMoreMenu
+                              ? 'bg-blue-50 ring-2 ring-blue-400 ring-offset-1 text-blue-600 scale-105'
+                              : 'group-hover:bg-black/5 text-gray-700'
+                            }`}
+                            style={{ width: '28px', height: '28px' }}
                         >
-                            <div className="grid grid-cols-3 gap-0.5">
+                            <div className="grid grid-cols-3 gap-[3px]">
                             {[...Array(9)].map((_,i) => (
-                                <div key={i} className={`w-1 h-1 rounded-full border border-current ${showMoreMenu ? 'bg-focus border-focus' : 'bg-transparent border-text-main'}`}></div>
+                                <div
+                                  key={i}
+                                  className={`w-[3px] h-[3px] rounded-full ${
+                                    showMoreMenu ? 'bg-blue-600' : 'bg-gray-700'
+                                  }`}
+                                ></div>
                             ))}
                             </div>
                         </div>
-                        <span className={`text-[9px] md:text-[11px] font-bold leading-tight mt-1.5 lowercase ${showMoreMenu ? 'text-focus' : 'text-text-main'}`}>more</span>
+                        <span
+                          className={`text-[12px] font-medium leading-tight tracking-tight
+                          ${showMoreMenu ? 'text-blue-600 font-semibold' : 'text-gray-700'}`}
+                        >
+                          more
+                        </span>
                     </button>
 
-                    {/* More Popover */}
+                    {/* More Popover - Redesigned */}
                     {showMoreMenu && (
-                        <div 
+                        <div
                             ref={popoverRef}
-                            className="popover-card absolute bottom-full right-0 md:right-8 mb-6 p-6 w-[min(360px,85vw)] animate-in slide-in-from-bottom-2 fade-in duration-200 z-[220] cursor-default"
-                            style={{ transformOrigin: 'bottom right' }}
+                            className="absolute bottom-full right-0 mb-6 p-6 w-[min(400px,85vw)] z-[220] cursor-default rounded-[20px] animate-in slide-in-from-bottom-2 fade-in duration-200"
+                            style={{
+                              backgroundColor: '#ffffff',
+                              boxShadow: '0 12px 32px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08)',
+                              transformOrigin: 'bottom right',
+                              border: '1px solid rgba(0, 0, 0, 0.06)'
+                            }}
                         >
-                            <div className="absolute -bottom-2 right-6 w-4 h-4 bg-bg-main border-b border-r border-border-default transform rotate-45"></div>
+                            <div className="absolute -bottom-2 right-8 w-4 h-4 bg-white transform rotate-45" style={{ boxShadow: '2px 2px 4px rgba(0,0,0,0.05)' }}></div>
 
                             <div className="w-full flex justify-center mb-6">
                                 <button
                                 onClick={() => setIsEditModalOpen(true)}
-                                className="text-center font-bold text-focus text-sm hover:underline hover:text-primary transition-colors"
+                                className="text-center font-semibold text-indigo-600 text-sm hover:text-indigo-700 hover:underline transition-colors"
                                 >
                                 Edit widget bar
                                 </button>
                             </div>
-                            
-                            <div className="grid grid-cols-4 gap-y-6 gap-x-2">
+
+                            <div className="grid grid-cols-4 gap-y-6 gap-x-3">
                                 {moreWidgets.map((type) => (
-                                    <div key={type} className="flex flex-col items-center group text-text-secondary hover:text-text-main">
-                                        <button 
+                                    <div key={type} className="flex flex-col items-center group">
+                                        <button
                                             onClick={() => { onAddWidget(type); setShowMoreMenu(false); }}
-                                            className="w-[48px] h-[48px] flex items-center justify-center rounded-[16px] hover:bg-bg-alt/50 hover:scale-110 transition-all border border-transparent hover:border-border-default mb-1 text-inherit"
+                                            className="w-[52px] h-[52px] flex items-center justify-center rounded-xl hover:bg-gray-100 hover:scale-110 transition-all duration-200 border border-transparent hover:border-gray-200 mb-1.5 text-gray-700"
                                         >
                                             <div className="scale-90">{ICONS[type]}</div>
                                         </button>
-                                        <span className="text-[10px] font-bold text-center w-full truncate px-1 lowercase tracking-tight">
+                                        <span className="text-[11px] font-medium text-center w-full truncate px-1 text-gray-700 tracking-tight">
                                             {WIDGET_LABELS[type]}
                                         </span>
                                     </div>
@@ -507,12 +561,17 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </div>
             </div>
 
-            {/* Hide Bar Chevron */}
-            <button 
+            {/* Collapse/Expand Chevron */}
+            <button
                 onClick={toggleCollapse}
-                className={`w-8 h-8 flex items-center justify-center rounded-full hover:bg-bg-alt/50 text-text-secondary transition-transform duration-300 ${isCollapsed ? 'rotate-180' : 'ml-1'}`}
+                className={`flex items-center justify-center rounded-full hover:bg-black/5 text-gray-600 transition-all duration-300 ease-out ${
+                  isCollapsed ? 'rotate-180 w-10 h-10' : 'w-8 h-8'
+                }`}
+                aria-label={isCollapsed ? 'Expand toolbar' : 'Collapse toolbar'}
             >
-               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+               </svg>
             </button>
         </div>
       </div>

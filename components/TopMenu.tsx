@@ -139,9 +139,17 @@ export const TopMenu: React.FC<TopMenuProps> = ({ room, onImport }) => {
         onChange={handleFileChange} 
       />
 
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-10 h-10 bg-bg-main/90 backdrop-blur-md rounded-full shadow-sm flex items-center justify-center text-text-secondary hover:bg-bg-alt transition-all border border-border-default ${isOpen ? 'bg-bg-main ring-2 ring-focus' : ''}`}
+        className={`w-10 h-10 backdrop-blur-xl rounded-full shadow-lg border border-white/50 flex items-center justify-center text-white transition-all shrink-0 group ${isOpen ? 'ring-2 ring-focus' : ''}`}
+        style={{
+          backgroundColor: '#ED3B91',
+          transition: 'background-color 0.2s ease, transform 0.1s ease'
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#D92F82'}
+        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ED3B91'}
+        onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+        onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
         title="More options"
       >
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

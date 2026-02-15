@@ -28,14 +28,14 @@ export const PollWidget: React.FC<WidgetProps> = ({ widget, isTeacher, onUpdate 
   };
 
   return (
-    <div className="flex flex-col h-full bg-white/40 p-6 space-y-6">
+    <div className="flex flex-col bg-white/40 p-4 md:p-6 space-y-4 w-full" style={{ maxWidth: 'clamp(360px, 42vw, 560px)' }}>
       <div className="space-y-1.5">
         {isTeacher ? (
           <>
             <label className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] ml-1">Poll Question</label>
-            <input 
-              type="text" 
-              value={question} 
+            <input
+              type="text"
+              value={question}
               placeholder="Type your question here..."
               onChange={(e) => onUpdate({ settings: { ...widget.settings, question: e.target.value }})}
               className="w-full text-lg font-extrabold bg-white/80 border-2 border-transparent focus:border-focus rounded-xl px-4 py-2 transition-all duration-300 text-text-main shadow-sm"
@@ -46,48 +46,50 @@ export const PollWidget: React.FC<WidgetProps> = ({ widget, isTeacher, onUpdate 
         )}
       </div>
 
-      <div className="flex-1 flex flex-col space-y-4 overflow-y-auto pr-2 scrollbar-hide">
+      <div className="flex flex-col space-y-4 overflow-y-auto pr-2 scrollbar-hide" style={{ maxHeight: '65vh' }}>
         {options.map((opt: string, i: number) => {
           const percentage = totalVotes === 0 ? 0 : Math.round((results[i] / totalVotes) * 100);
           return (
-            <div key={i} className="flex flex-col space-y-2 animate-in fade-in slide-in-from-left duration-500" style={{ animationDelay: `${i * 100}ms` }}>
+            <div key={i} className="flex flex-col space-y-3 animate-in fade-in slide-in-from-left duration-500" style={{ animationDelay: `${i * 100}ms` }}>
               <div className="flex items-center justify-between gap-3">
                 {isTeacher ? (
-                  <input 
-                    type="text" 
-                    value={opt} 
+                  <input
+                    type="text"
+                    value={opt}
                     placeholder={`Option ${i+1}`}
                     onChange={(e) => handleUpdateOption(i, e.target.value)}
-                    className="flex-1 p-3 text-sm font-bold bg-white border-2 border-border-default rounded-2xl shadow-sm focus:border-focus transition-all outline-none text-text-main"
+                    className="flex-1 p-4 text-base font-bold bg-white border-2 border-border-default rounded-2xl shadow-sm focus:border-focus transition-all outline-none text-text-main min-h-[48px]"
                   />
                 ) : (
-                  <span className="text-base font-bold text-text-main pl-2">{opt}</span>
+                  <button className="flex-1 text-left p-4 text-base font-bold bg-white/80 hover:bg-white border-2 border-border-default hover:border-primary rounded-2xl shadow-sm transition-all text-text-main min-h-[48px]">
+                    {opt}
+                  </button>
                 )}
-                
+
                 {isTeacher && (
-                  <div className="flex items-center gap-1.5 bg-bg-alt p-1 rounded-2xl border border-border-default">
-                    <button 
-                      onClick={() => handleUpdateResult(i, -1)} 
-                      className="w-9 h-9 flex items-center justify-center rounded-xl bg-white shadow-sm hover:bg-red-50 text-text-secondary hover:text-red-600 transition-all font-bold text-lg active:scale-90"
+                  <div className="flex items-center gap-2 bg-bg-alt p-1.5 rounded-2xl border border-border-default">
+                    <button
+                      onClick={() => handleUpdateResult(i, -1)}
+                      className="w-11 h-11 flex items-center justify-center rounded-xl bg-white shadow-sm hover:bg-red-50 text-text-secondary hover:text-red-600 transition-all font-bold text-xl active:scale-90"
                     >–</button>
-                    <span className="text-sm font-black w-10 text-center tabular-nums text-text-main">{results[i]}</span>
-                    <button 
-                      onClick={() => handleUpdateResult(i, 1)} 
-                      className="w-9 h-9 flex items-center justify-center rounded-xl bg-primary shadow-lg shadow-glow hover:bg-primary-hover text-white transition-all font-bold text-lg active:scale-90"
+                    <span className="text-base font-black w-12 text-center tabular-nums text-text-main">{results[i]}</span>
+                    <button
+                      onClick={() => handleUpdateResult(i, 1)}
+                      className="w-11 h-11 flex items-center justify-center rounded-xl bg-primary shadow-lg shadow-glow hover:bg-primary-hover text-white transition-all font-bold text-xl active:scale-90"
                     >+</button>
                   </div>
                 )}
               </div>
 
               {showResults && (
-                <div className="relative h-8 bg-bg-alt rounded-2xl overflow-hidden border border-border-default">
-                    <div 
-                      className="h-full bg-primary transition-all duration-1000 ease-[cubic-bezier(0.2,1,0.2,1)] flex items-center pl-4 relative"
+                <div className="relative h-[10px] bg-bg-alt rounded-full overflow-hidden border border-border-default shadow-inner">
+                    <div
+                      className="h-full bg-gradient-to-r from-primary to-primary-hover transition-all duration-1000 ease-[cubic-bezier(0.2,1,0.2,1)] relative rounded-full"
                       style={{ width: `${(results[i] / maxVotes) * 100}%` }}
                     >
-                      <span className="text-[11px] font-black text-white whitespace-nowrap drop-shadow-sm">{percentage}%</span>
-                      <div className="absolute top-0 left-0 w-full h-1/2 bg-white/10" />
+                      <div className="absolute top-0 left-0 w-full h-1/2 bg-white/20 rounded-full" />
                     </div>
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-black text-text-secondary">{percentage}%</span>
                 </div>
               )}
             </div>
@@ -96,19 +98,19 @@ export const PollWidget: React.FC<WidgetProps> = ({ widget, isTeacher, onUpdate 
       </div>
 
       {isTeacher && (
-        <div className="pt-4 border-t border-border-default flex items-center justify-between">
-           <button 
+        <div className="pt-3 border-t border-border-default flex items-center justify-between">
+           <button
              onClick={() => onUpdate({ settings: { ...widget.settings, showResults: !showResults }})}
              className={`px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] transition-all flex items-center gap-2.5 ${showResults ? 'bg-focus-light text-focus border border-focus' : 'bg-bg-alt text-text-secondary hover:bg-gray-200 border border-transparent'}`}
            >
              <div className={`w-2.5 h-2.5 rounded-full ${showResults ? 'bg-focus animate-pulse' : 'bg-gray-400'}`} />
              {showResults ? 'Public Results' : 'Show Results'}
            </button>
-           <button 
+           <button
              onClick={() => {
                 const newOpts = [...options, `Option ${options.length + 1}`];
                 const newRes = [...results, 0];
-                onUpdate({ 
+                onUpdate({
                   settings: { ...widget.settings, options: newOpts },
                   state: { ...widget.state, results: newRes }
                 });
