@@ -161,16 +161,28 @@ const ClassroomScreen: React.FC<ClassroomScreenProps> = ({
   };
 
   // Robust determination of video type with query param support
-  const isVideo = room?.background?.mediaType === 'video' || 
+  const isVideo = room?.background?.mediaType === 'video' ||
                   (typeof room?.background?.value === 'string' && !!room.background.value.match(/\.(mp4|webm|mov|m4v)(\?|$|#)/i));
+
+  // Debug logging
+  console.log('[ClassroomScreen] Background:', {
+    type: room?.background?.type,
+    mediaType: room?.background?.mediaType,
+    value: room?.background?.value?.substring(0, 50) + '...',
+    isVideo
+  });
 
   // Video Playback Logic - Uses Key-based remounting for reliable source switching
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !isVideo) return;
+    if (!video || !isVideo) {
+      console.log('[Video] Skipping playback - video element or isVideo not ready', { hasVideo: !!video, isVideo });
+      return;
+    }
 
+    console.log('[Video] Initializing playback for:', room?.background.value);
     let isActive = true;
-    
+
     // 1. Enforce Properties
     video.muted = true;
     video.defaultMuted = true;
@@ -195,12 +207,19 @@ const ClassroomScreen: React.FC<ClassroomScreenProps> = ({
         if (!isActive) return;
         // Only attempt if paused to avoid promise interruption
         if (video.paused) {
+            console.log('[Video] Attempting to play...');
             const playPromise = video.play();
             if (playPromise !== undefined) {
-                playPromise.catch(err => {
-                    console.warn('[Video] Playback prevented:', err.message);
-                });
+                playPromise
+                    .then(() => {
+                        console.log('[Video] ✓ Playing successfully');
+                    })
+                    .catch(err => {
+                        console.warn('[Video] ✗ Playback prevented:', err.message);
+                    });
             }
+        } else {
+            console.log('[Video] Already playing');
         }
     };
 

@@ -114,7 +114,12 @@ export const ToolsPanel: React.FC<ToolsPanelProps> = ({ settings, onUpdate, onCl
         <div className="flex items-center gap-2 shrink-0 min-w-fit">
           <button
             onClick={handleSquiggleClick}
-            className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 ${!isSelectTool ? 'bg-primary text-white shadow-lg shadow-glow scale-105' : 'text-gray-400 hover:bg-gray-100'}`}
+            className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 ${!isSelectTool ? 'text-white shadow-lg scale-105' : 'text-gray-400 hover:bg-gray-100'}`}
+            style={!isSelectTool ? { backgroundColor: 'var(--color-primary-main)' } : {}}
+            onMouseEnter={(e) => !isSelectTool && (e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)')}
+            onMouseLeave={(e) => !isSelectTool && (e.currentTarget.style.backgroundColor = 'var(--color-primary-main)')}
+            onMouseDown={(e) => !isSelectTool && (e.currentTarget.style.backgroundColor = '#c01867')}
+            onMouseUp={(e) => !isSelectTool && (e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)')}
             title="Draw Mode"
           >
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

@@ -151,8 +151,9 @@ const WidgetContainer: React.FC<WidgetContainerProps> = ({ widget, isTeacher, on
           containerRef.current.style.zIndex = String(topZIndex);
         }
 
-        // Apply visual feedback
+        // Apply visual feedback and disable CSS transitions during drag
         containerRef.current.classList.add('is-dragging');
+        containerRef.current.style.transition = 'none';
       } else {
         return; // Not enough movement yet
       }
@@ -200,28 +201,50 @@ const WidgetContainer: React.FC<WidgetContainerProps> = ({ widget, isTeacher, on
       rafIdRef.current = null;
     }
 
-    // Remove visual feedback
-    if (containerRef.current) {
-      containerRef.current.classList.remove('is-dragging');
-      containerRef.current.style.transform = '';
-    }
-
     // Only update position if we actually dragged
-    if (wasDragging && onUpdate) {
+    if (wasDragging && onUpdate && containerRef.current) {
       // Calculate final position: pointer position minus offset to window top-left
       const finalX = e.clientX - dragInfo.current.offsetX;
       const finalY = e.clientY - dragInfo.current.offsetY;
 
-      // Clamp within viewport bounds
-      const clampedX = Math.max(0, Math.min(finalX, windowSize.width - (widget.minimized ? 200 : dims.width)));
-      const clampedY = Math.max(0, Math.min(finalY, windowSize.height - (widget.minimized ? 48 : 200)));
+      // Use SAME clamping logic as containerStyle to prevent jitter on re-render
+      const baseWidth = widget.minimized ? 200 : dims.width;
+      const safeWidth = Math.min(baseWidth, windowSize.width * 0.9);
+      const estimatedHeight = widget.minimized ? 48 : 500;
 
+      const maxLeft = Math.max(0, windowSize.width - safeWidth);
+      const maxTop = Math.max(0, windowSize.height - estimatedHeight);
+
+      const clampedX = Math.max(0, Math.min(finalX, maxLeft));
+      const clampedY = Math.max(0, Math.min(finalY, maxTop));
+
+      // Grid-snap final position
+      const snappedX = Math.round(clampedX / GRID_SIZE) * GRID_SIZE;
+      const snappedY = Math.round(clampedY / GRID_SIZE) * GRID_SIZE;
+
+      // Remove transform and visual feedback (keep transition disabled for now)
+      containerRef.current.classList.remove('is-dragging');
+      containerRef.current.style.transform = '';
+
+      // Persist to state - React will re-render with identical position (no jitter)
       onUpdate({
         position: {
-          x: Math.round(clampedX / GRID_SIZE) * GRID_SIZE,
-          y: Math.round(clampedY / GRID_SIZE) * GRID_SIZE
+          x: snappedX,
+          y: snappedY
         }
       });
+
+      // Restore CSS transitions after React re-renders (next frame)
+      requestAnimationFrame(() => {
+        if (containerRef.current) {
+          containerRef.current.style.transition = '';
+        }
+      });
+    } else if (containerRef.current) {
+      // Not dragging, just remove visual feedback
+      containerRef.current.classList.remove('is-dragging');
+      containerRef.current.style.transform = '';
+      containerRef.current.style.transition = '';
     }
   };
 
